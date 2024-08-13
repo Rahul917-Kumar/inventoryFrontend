@@ -22,6 +22,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Navbar from '@/app/components/navbars/navbar';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 
 interface NewItem{
     name:string;
@@ -46,6 +47,7 @@ const AddItem = () => {
   const [open, setOpen] = useState(false)
   const [item, setItem] = useState<NewItem>({} as NewItem)
   const [loading, setLoading] = useState(false)
+  const [message, setMessage] = useState("")
   const {token} = tokenStore((state)=>({
     token:state.token
   }))
@@ -61,8 +63,9 @@ const AddItem = () => {
   }
 
   const handleAddItemToInventory = async()=>{
+        setMessage("Please Wait Adding Items to Inventory")
         setLoading(true)
-        console.log("updating item")
+        // console.log("updating item")
         const tempItems = newItems.map((item)=>{
             if(item.image_url){
                 return {name:item.name, price:Number(item.price), available_quantity:Number(item.quantity), display_image_url:item.image_url}
@@ -94,6 +97,7 @@ const AddItem = () => {
         else{
             handleErrorToast("Something went wrong try again")
         }
+        setMessage("")
         setLoading(false)
   }
 
@@ -116,7 +120,7 @@ const AddItem = () => {
          {
             loading?(
                 <>
-                    <Loader />
+                    <Loader message={message}/>
                 </>
             ):( 
                 <></>
@@ -124,49 +128,33 @@ const AddItem = () => {
          }
          <ToastContainer />
          <Navbar type={"admin"} />
-        <Box sx={{display:"flex",
-                    justifyContent:"center", 
-                    width:"100vw", 
-                    height:"100vh", 
-                    alignItems:"center",
-                    backgroundColor:"grey"
-                }}>
-            <Box sx={{width:"900px", height:"95vh", backgroundColor:"white", borderWidth:"1px",
-                    borderStyle:"solid",
-                    borderRadius:"10px",
-                    padding:"5px"}}>
-                <Box sx={{textAlign:"center"}}>
-                <Typography variant='h5'>Add Items To Inventory</Typography>
-                    <Tooltip title="Add Item">
-                        <Button sx={{}} onClick={handleOpenModal} >
-                            <AddCircleIcon sx={{fontSize:"2rem"}} />
-                        </Button>
-                    </Tooltip>
-                </Box>
-                {/* <Box sx={{height:"79vh",maxHeight:"70vh", overflowY:"auto", display:"flex", flexDirection:"column", justifyContent:"start", alignItems:"center"}}> */}
-                    {
-                        /* list of added itema and also show the edit button to update the item */
-                /*         newItems.map((item)=>{
-                            return (
-                                <>
-                                    <DisplayAddedItem item={item} />
-                                </>
-                            )
-                         })
-                    */
-                    }
 
-                {/* </Box> */}
+         <AddNewItemModal  open={open} addItem={addItem} handleCloseModal={handleCloseModal} />
+        <div 
+            className='adminAddItemOuterDiv'
+        >
+
+            <div className='adminAddItemInnerDiv' style={{margin:"1rem"}}>
+                <div style={{display:"flex", justifyContent:"space-between", margin:"1rem"}}>
+                <Tooltip title="New Item">
+                    <Button sx={{}} onClick={handleOpenModal} variant='contained' startIcon={<AddCircleIcon/>}>
+                            New Item
+                    </Button>  
+                </Tooltip>
+                    <Tooltip title="Update Inventory">
+                        <Button sx={{}} 
+                            onClick={handleAddItemToInventory} 
+                            variant='contained' 
+                            startIcon={<FileUploadIcon/>}
+                            disabled={newItems.length===0?true:false}
+                        >
+                                Update Inventory
+                        </Button>  
+                    </Tooltip>
+                </div>
                 <DisplayAddedItem  items={newItems} />
-                <AddNewItemModal  open={open} addItem={addItem} handleCloseModal={handleCloseModal} />
-                <Divider></Divider>
-                <Box sx={{textAlign:"right", margin:"1rem 0 1rem 0"}}>
-                    <Button variant='contained' onClick={handleAddItemToInventory}
-                        disabled={newItems.length===0?true:false}
-                    >Update</Button>
-                </Box>
-            </Box>
-        </Box>
+            </div>
+        </div>
     </>
   )
 }
@@ -176,47 +164,25 @@ export default AddItem
 const DisplayAddedItem = ({items}:DisplayAddedItemProps)=>{
     return (
         <>
-            {/* <Box sx={{display:"flex", justifyContent:"space-between", alignItems:"center", height:"80px", width:"70%",
-                backgroundColor:"",
-                margin:"1rem",
-                borderWidth:"1px",
-                borderStyle:"solid",
-                borderRadius:"3px",
-                padding:"10px"
-            }}>
-                <Box sx={{ height:"70px", borderRadius:"10px"}}>
-                    <img 
-                        src={item.image_url} 
-                        alt="Item Image"
-                        style={{width:"100%", height:"100%", objectFit:"cover"}}    
-                    />
-                </Box>
-                <Box sx={{textAlign:"left"}}>
-                    <Typography>Name: {item.name}</Typography>
-                    <Typography>Quantity: {item.quantity}</Typography>
-                    <Typography>Price: {item.price}</Typography>
-                </Box>
-            </Box>
-            <Divider></Divider> */}
               <TableContainer sx={{height:"79vh",maxHeight:"70vh", overflowY:"auto", display:"flex", flexDirection:"column", justifyContent:"start", alignItems:"center"}}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                     <TableRow>
                         <TableCell>
-                            <Typography variant="h6">Item Image</Typography>
+                            <Typography>Item Image</Typography>
                         </TableCell>
                         <TableCell align="right">
-                            <Typography variant="h6">
+                            <Typography >
                                 Item Name
                             </Typography>
                         </TableCell>
                         <TableCell align="right">
-                            <Typography variant="h6">
+                            <Typography>
                                 Item Quantity
                             </Typography>
                         </TableCell>
                         <TableCell align="right">
-                            <Typography variant="h6">
+                            <Typography>
                                 Item Price
                             </Typography>
                         </TableCell>
@@ -233,7 +199,7 @@ const DisplayAddedItem = ({items}:DisplayAddedItemProps)=>{
                                     <img 
                                         src={item.image_url} 
                                         alt="Item Image"
-                                        style={{width:"100%", height:"100%", objectFit:"cover"}}    
+                                        style={{width:"100%", height:"100%", objectFit:"contain"}}    
                                     />
                                 </Box>
                         </TableCell>
@@ -257,7 +223,7 @@ const  AddNewItemModal = ({open, addItem, handleCloseModal }:ModalProps)=> {
     const [errorQuant, setErrorQuant] = useState("")
     const [errorPrice, setErrorPrice] = useState("")
     const [loading, setLoading] = useState(false)
-
+    const [message, setMessage] = useState("")
     // message
 
     const handleAddItem = ()=>{
@@ -297,6 +263,7 @@ const  AddNewItemModal = ({open, addItem, handleCloseModal }:ModalProps)=> {
     }
     // show loader to upload image as soon as it is selected
     const handleFileChange = async(e: React.ChangeEvent<HTMLInputElement>) => {
+        setMessage("Please Wait Uploading Image")
         setLoading(true)
         if (e.target.files && e.target.files.length > 0) {
             const data = new FormData()
@@ -311,6 +278,7 @@ const  AddNewItemModal = ({open, addItem, handleCloseModal }:ModalProps)=> {
                 handleErrorToast("Something went wrong try again")
             }
         }
+        setMessage("")
         setLoading(false)
     }
 
@@ -320,7 +288,7 @@ const  AddNewItemModal = ({open, addItem, handleCloseModal }:ModalProps)=> {
       {
         loading?(
             <>
-                <Loader />
+                <Loader message={message} />
             </>
         ):(
             <></>
@@ -364,6 +332,21 @@ const  AddNewItemModal = ({open, addItem, handleCloseModal }:ModalProps)=> {
                 helperText={errorPrice.length>0?errorPrice:""}
                 onChange={(e)=>handlePrice(e)} 
             />
+            {
+                image_url?(
+                    <>
+                        <div className='imageCardContainer'>
+                            <img 
+                                src={image_url} 
+                                alt="Item Image"
+                                style={{width:"100%", height:"100%", objectFit:"contain"}}      
+                            />
+                        </div>
+                    </>
+                ):(
+                    <></>
+                )
+            }
             <input type="file" 
                 onChange={(e)=>handleFileChange(e)}  
             />

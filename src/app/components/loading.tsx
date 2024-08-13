@@ -1,10 +1,10 @@
-import { Box, CircularProgress } from '@mui/material'
+import { Box, CircularProgress, Typography } from '@mui/material'
 import React from 'react'
 
-const Loader = () => {
+const Loader = ({message}:{message?:string | undefined}) => {
   return (
     <Box 
-        sx={{ 
+        sx={{
             display: 'flex',
             alignItems:"center",
             justifyContent:"center",
@@ -17,7 +17,17 @@ const Loader = () => {
             backgroundColor:"rgba(0, 0, 0, 0.5)"
         }}
     >
-      <CircularProgress  />
+        <Box
+            sx={{
+                display: 'flex',
+            alignItems:"center",
+            justifyContent:"center",
+            flexDirection:"column"
+            }}
+        >
+        <Typography sx={{color:"white", margin:"1rem"}}>{message}</Typography>
+        <CircularProgress  />
+        </Box>
     </Box>
   )
 }

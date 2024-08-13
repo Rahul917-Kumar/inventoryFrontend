@@ -38,3 +38,21 @@
     text-align:center;
     color:white;
   }
+
+
+.adminAddItemOuterDiv{
+    display: flex;
+    /* width: 100vw; */
+    height:90vh;
+    justify-content: center;
+}
+
+.adminAddItemInnerDiv{
+    width:60%;
+    height:85vh;
+    max-height: 85vh;
+    overflow-y: auto;
+    /* background-color: ; */
+    border-radius: 3px;
+    box-shadow: 2px 2px 15px 5px #767474;
+}
