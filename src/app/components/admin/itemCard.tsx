@@ -22,7 +22,7 @@ interface IncrementQuantityProps{
     intialQuantity:number;
     quantity:number;
     maxQuantity:number;
-    handleQuantity:()=>void;
+    handleQuantity:(type:string)=>void;
 }
 
 const ItemCard = ({item, handleItemsUpdate}:CardProp) => {
@@ -37,8 +37,12 @@ const ItemCard = ({item, handleItemsUpdate}:CardProp) => {
     }))
 
     const maxQuantity = 20
-    const handleQuantity = ()=>{
-        setQuantity(quantity+1)
+    const handleQuantity = (type:string)=>{
+        if(type==="increase"){
+            setQuantity(quantity+1)
+        }else{
+            setQuantity(quantity-1)
+        }
     }
 
     const updateItem = async(_id:string, quantity:number)=>{
@@ -63,7 +67,7 @@ const ItemCard = ({item, handleItemsUpdate}:CardProp) => {
         }
         else{
           handleErrorToast("Something went wrong Please Retry")
-          // show toast of failure
+          setQuantity(item.available_quantity)
         }
         setLoading(false)
       }
@@ -79,54 +83,45 @@ const ItemCard = ({item, handleItemsUpdate}:CardProp) => {
             <></>
         )
     }
-        <div style={{margin:"1rem"}}>
-            {/* <Card sx={{padding:"1rem"}}>
-            <CardActionArea sx={{height:"200px", backgroundColor:""}}>
-                <Box sx={{backgroundColor:"", height:"120px", display:"flex", justifyContent:"center", alignItems:"center"}}>
-                    <Box sx={{width:"80px", height:"120px"}}>
-                        <img 
-                            src="https://th.bing.com/th/id/OIP.eTT3w24Pb9S-JKIIw85AewHaKE?w=132&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7" 
-                            alt="Item Image"
-                            style={{width:"100%", height:"100%", objectFit:"cover"}}    
-                        />
-                    </Box>
-                </Box>
-                <CardContent>
-                <Typography gutterBottom variant="h6" component="div" sx={{textAlign:"center"}}>
-                    {item.name}
-                </Typography>
-                
-                </CardContent>
-            </CardActionArea>
-            <>
-            <Box sx={{display:"flex", justifyContent:"center", alignItems:"center", margin:"1rem"}}>
-                    <Typography>
-                        ₹ {item.price}
-                    </Typography>
-                </Box>
-            <Box sx={{display:"flex", justifyContent:"center", alignItems:"center"}}>
-                {
-                    intialQuantity === maxQuantity?(
-                        <>
-                                <Typography variant='h6'>Item Full</Typography>
-                        </>
-                    ):(
-                        <>
-                            <IncrementDecrementCount intialQuantity={intialQuantity} quantity={quantity} maxQuantity={maxQuantity} handleQuantity={handleQuantity}  />
+        <div>
+            <div className='card flexElements' style={{height: "23rem"}}>
+          <div className='flexElementsRow'>
+            <div className='imageCardContainer'>
+              {/* image */}
+              <img 
+                  src="https://th.bing.com/th/id/OIP.eTT3w24Pb9S-JKIIw85AewHaKE?w=132&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7" 
+                  alt="Item Image"
+                  style={{width:"100%", height:"100%", objectFit:"contain", boxShadow:"0 4px 2px -2px rgba(0, 0, 0, 0.2)"}}    
+                  
+              />
+            </div>
+          </div>
+          <div style={{backgroundColor:"", padding:"0.5rem", textAlign:"center"}}>
+            <Typography variant='h5' sx={{fontWeight:"bold"}}> {item.name} </Typography>
+            <Typography sx={{fontWeight:"400", margin:"0.5rem 0 0.5rem 0", fontSize:"1.4rem"}}>₹ {item.price}</Typography>
+          </div>
+          
+                    <div 
+                        // className='addItemDiv flexElementsRow'
+                      >
+                      <IncrementDecrementCount intialQuantity={intialQuantity} quantity={quantity} maxQuantity={maxQuantity} handleQuantity={handleQuantity}  />
+                    </div>
+                    <div className='addItemDiv' style={{padding:"1rem"}}>
                             <Button 
                                 onClick={()=>updateItem(item._id, quantity)} 
                                 disabled={(intialQuantity===quantity || loading)?true:false}
                                 variant='contained'
+                                sx={{
+                                    "&.Mui-disabled": {
+                                        backgroundColor: "#b0c4de", 
+                                        color: "gray",              
+                                    },
+                                }}
                             >
                                 Done 
                             </Button>
-                        </>
-                    )
-                }
-            </Box>
-            </>
-            </Card> */}
-            
+                    </div>
+        </div>
         </div>
     </>
   )
@@ -135,16 +130,20 @@ const ItemCard = ({item, handleItemsUpdate}:CardProp) => {
 export default ItemCard
 
 const IncrementDecrementCount = ({intialQuantity, quantity, maxQuantity, handleQuantity}:IncrementQuantityProps)=>{
-    const val = quantity
-    // console.log(val)
     return (
       <Box sx={{marginLeft:"5px", display:"flex", justifyContent:"space-evenly", alignContent:"center", alignItems:"center"}}>
-        <p style={{margin:"5px"}}>{quantity}/{maxQuantity}</p>
+        <Button onClick={()=>handleQuantity("decrease")}
+            disabled={quantity === intialQuantity ?true:false}
+            sx={{color: quantity === intialQuantity ? '#A9A9A9' : 'blue', fontSize:"2rem"}} > 
+            <RemoveIcon/> 
+        </Button>
+        <p style={{margin:"5px",fontSize:"1.3rem"}}>{quantity}/{maxQuantity}</p>
         <Button 
-            onClick={handleQuantity} 
+            onClick={()=>handleQuantity("increase")} 
             disabled={quantity === maxQuantity ?true:false}
+            sx={{ backgroundColor: quantity === maxQuantity ? '' : ''}}
         > 
-            <AddIcon/> 
+            <AddIcon sx={{color: quantity === maxQuantity ? '#A9A9A9' : 'blue', fontSize:"2rem"}}/> 
         </Button>
       </Box>
     )

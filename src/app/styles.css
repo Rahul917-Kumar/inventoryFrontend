@@ -1,7 +1,6 @@
 
 .card{
     width: 15rem;
-    height: 20rem;
     /* background-color: blue; */
     margin:1rem;
     border-width: 1px;
@@ -30,8 +29,9 @@
     padding: 0.5rem;
   }
 
+
+
   .addItemDiv{
-    padding:1.5rem;
     border-radius:0 0 8px 8px;
     background-color:#1565c0;
     cursor:pointer;

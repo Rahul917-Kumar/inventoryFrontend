@@ -32,9 +32,7 @@ const AllItems = () => {
             {
                     items.map((item, index)=>{
                         return (
-                            <Grid xs={12} sm={6} md={4} lg={3}>
                                <ItemCard key={item._id} item={item}/>
-                            </Grid>
                         )
                     })
             }

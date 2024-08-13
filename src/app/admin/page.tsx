@@ -49,23 +49,24 @@ const Page = () => {
     <>
     <Navbar type={"admin"}/>
       <ToastContainer />
-      <Box sx={{ flexGrow: 1}} >
-        {/* <Box sx={{display:"flex", alignItems:"center", justifyContent:"end", margin:"1rem", borderWidth:"2px", borderStyle:"solid"}}>
-          <Typography sx={{margin:"1rem", fontWeight:"bold"}}>Click to Add New Items</Typography>
-          <Button sx={{margin:"1rem"}} variant='contained' onClick={()=>router.push("/admin/addItem")}>Add Items</Button>
-        </Box> */}
-              <Grid container spacing={2}>
-                      {
-                          items.map((item, index)=>{
-                              return (
-                                  <Grid xs={12} sm={6} md={4} lg={3}>
-                                    <ItemCard key={item._id} item={item} handleItemsUpdate={handleItemsUpdate}/>
-                                  </Grid>
-                              )
-                          })
-                      }
-              </Grid>
-          </Box>
+          <Box>
+            <Box
+                sx={{
+                    display:"flex", 
+                    justifyContent:"flex-start",
+                    alignItems:"center",
+                    flexWrap:"wrap",
+                }}
+            >
+            {
+                    items.map((item, index)=>{
+                        return (
+                               <ItemCard key={item._id} item={item} handleItemsUpdate={handleItemsUpdate}/>
+                        )
+                    })
+            }
+            </Box>
+        </Box>
     </>
   )
 }

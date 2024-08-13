@@ -48,7 +48,7 @@ const ItemCard = ({item}:ItemCardProps) => {
   
   return (
     <div>
-        <div className='card flexElements'>
+        <div className='card flexElements' style={{height: "20rem"}}>
           <div className='flexElementsRow'>
             <div className='imageCardContainer'>
               {/* image */}
@@ -61,8 +61,8 @@ const ItemCard = ({item}:ItemCardProps) => {
             </div>
           </div>
           <div style={{backgroundColor:"", padding:"0.5rem", textAlign:"center"}}>
-            <Typography variant='h5' sx={{fontWeight:"bold", fontFamily:"Roboto sans-serif"}}> {item.name} </Typography>
-            <Typography sx={{fontWeight:"500", margin:"0.5rem 0 0.5rem 0"}}>₹ {item.price}</Typography>
+            <Typography variant='h5' sx={{fontWeight:"bold"}}> {item.name} </Typography>
+            <Typography sx={{fontWeight:"400", margin:"0.5rem 0 0.5rem 0", fontSize:"1.4rem"}}>₹ {item.price}</Typography>
           </div>
           
             {
@@ -71,13 +71,14 @@ const ItemCard = ({item}:ItemCardProps) => {
                     <div 
                         className='addItemDiv'
                         onClick={()=>handleAddItems()}
+                        style={{padding:"1.5rem"}}
                       >
                       ADD
                     </div>
                 </>
               ):(
                 <>
-                  <div className='addItemDiv'>
+                  <div className='addItemDiv' style={{padding:"1.5rem"}}>
                     <IncrementDecrementCount 
                                 itemCount={itemCount} 
                                 available_quantity={item.available_quantity} 
@@ -100,7 +101,7 @@ const IncrementDecrementCount = ({itemCount, available_quantity, handleAddItems,
   return (
     <Box sx={{   display:"flex", justifyContent:"space-evenly", alignContent:"center", alignItems:"center",}}>
       <Button onClick={handleRemoveItems} sx={{color:"white", padding:"0", margin:"0"}}> <RemoveIcon/> </Button>
-      <p style={{fontWeight:"bold", padding:"0", margin:"0"}}>{itemCount}</p>
+      <p style={{fontWeight:"bold", padding:"0", margin:"0", fontSize:"1.4rem"}}>{itemCount}</p>
       <Button 
           onClick={handleAddItems} 
           disabled={itemCount===available_quantity?true:false}
