@@ -34,11 +34,13 @@ interface TableProps{
 const CartModal = ({open, handleClickOpen, handleClose}:CartProps) => {
     const router = useRouter()
     const [loading, setLoading] = useState(false)
-    const {totalAmount, items} = itemStore((state)=>({
+    const {totalAmount, items, clearItems, clearAmount, addBillAmount, addBillItems} = itemStore((state)=>({
         totalAmount:state.totalAmount,
         items:state.items,
         clearItems:state.clearItems,
-        clearAmount:state.clearAmount
+        clearAmount:state.clearAmount,
+        addBillAmount:state.addBillAmount,
+        addBillItems:state.addBillItems
     }))
     const handlePayment = async()=>{
         console.log("items from total cost", items)
@@ -47,9 +49,11 @@ const CartModal = ({open, handleClickOpen, handleClose}:CartProps) => {
         if(result.status === 200){
             handleSuccessToast()
             handleClose()
-            setTimeout(()=>{
-                router.push("/bill")
-            }, 1000)
+            addBillAmount(totalAmount)
+            addBillItems(items)
+            clearAmount()
+            clearItems()
+            router.push("/bill")
         }else{
             handleErrorToast()
             handleClose()

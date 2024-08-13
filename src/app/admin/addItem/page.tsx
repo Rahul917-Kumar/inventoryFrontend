@@ -48,8 +48,9 @@ const AddItem = () => {
   const [item, setItem] = useState<NewItem>({} as NewItem)
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState("")
-  const {token} = tokenStore((state)=>({
-    token:state.token
+  const {token, addToken} = tokenStore((state)=>({
+    token:state.token,
+    addToken:state.addToken
   }))
   const addItem = (name:string, quantity:string, price:string, image_url:string)=>{
     // after adding item close modal
@@ -74,6 +75,8 @@ const AddItem = () => {
             }
         }) 
 
+        console.log("items to be uploaded", tempItems)
+
         const result = await axios.post("http://localhost:8080/items", tempItems,{
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -84,9 +87,9 @@ const AddItem = () => {
         if(result.status===200){
             setNewItems([])
             handleSuccessToast("Successfully added Items to Inventory")
-            setTimeout(()=>{
-                router.push("/admin")
-            }, 1000)
+            // setTimeout(()=>{
+            //     router.push("/admin")
+            // }, 1000)
         }
         else if(result.status===403){
             handleErrorToast("Session Expired Redirecting to Login page")
@@ -113,6 +116,8 @@ const AddItem = () => {
     if(!token){
       router.push("/admin/login")
     }
+    addToken(token)
+
   },[])
 
   return (
@@ -272,6 +277,7 @@ const  AddNewItemModal = ({open, addItem, handleCloseModal }:ModalProps)=> {
             data.append("cloud_name", "de7fldt0n")
             const result = await axios.post("https://api.cloudinary.com/v1_1/de7fldt0n/image/upload", data)
             if(result.status ===200){
+                console.log(result.data.secure_url)
                 setImageUrl(result.data.secure_url)
                 handleSuccessToast("Successfully uploaded Image")
             }else{

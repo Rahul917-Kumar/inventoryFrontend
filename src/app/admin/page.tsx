@@ -9,6 +9,8 @@ import { toast, ToastContainer } from 'react-toastify'
 import Navbar from '../components/navbars/navbar'
 import tokenStore from '../../../store/tokenStore'
 import 'react-toastify/dist/ReactToastify.css';
+import { handleErrorToast } from '../../../lib/handleToast'
+import Loader from '../components/loading'
 
 const Page = () => {
   const router = useRouter()
@@ -18,9 +20,14 @@ const Page = () => {
     addToken:state.addToken
   }))
   const getAllItems = async()=>{
+    setLoading(true)
     const result = await axios.get("http://localhost:8080/items")
-    console.log(result.data)
-    setItems([...result.data])
+    if(result.status === 200){
+        setItems([...result.data])
+    }else{
+        handleErrorToast("something went wrong")
+    }
+    setLoading(false)
   }
 
   const handleItemsUpdate = (_id:string, quantity:number)=>{
@@ -48,7 +55,29 @@ const Page = () => {
   return (
     <>
     <Navbar type={"admin"}/>
+    {
+            loading?(
+                <>
+                    <Loader message={""} />
+                </>
+            ):(
+                <>
+
+                </>
+            )
+        }
       <ToastContainer />
+      {
+        items.length ===0?(
+          <>
+            <div style={{textAlign:"center", margin:"1rem"}}>
+                <Typography variant='h5'>No items in Inventory</Typography>
+            </div>
+          </>
+        ):(
+          <></>
+        )
+      }
           <Box>
             <Box
                 sx={{

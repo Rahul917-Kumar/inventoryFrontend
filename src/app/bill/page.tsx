@@ -15,78 +15,39 @@ import { useRouter } from 'next/navigation'
 import 'react-toastify/dist/ReactToastify.css';
 import Navbar from '../components/navbars/navbar'
 import VerifiedIcon from '@mui/icons-material/Verified';
+import tokenStore from '../../../store/tokenStore'
+import { clear } from 'console'
 
 const CartPage = () => {
     const router = useRouter()
-    
-    const {totalAmount, items, clearItems, clearAmount} = itemStore((state)=>({
-        totalAmount:state.totalAmount,
-        items:state.items,
-        clearItems:state.clearItems,
-        clearAmount:state.clearAmount
+    const {token, addToken} = tokenStore((state)=>({
+        token:state.token,
+        addToken:state.addToken
       }))
 
-        const handleStates = ()=>{
-            clearAmount()
-            clearItems()
-            router.push("/")
+    const {totalAmount, items, clearAmount, clearItems, billAmount, billItems} = itemStore((state)=>({
+        totalAmount:state.totalAmount,
+        items:state.items,
+        clearAmount:state.clearAmount,
+        clearItems:state.clearItems,
+        billAmount:state.billAmount,
+        billItems:state.billItems
+      }))
+
+      
+    useEffect(()=>{
+        const token = localStorage.getItem("token")
+        if(!token){
+        router.push("/admin/login")
         }
+        if(billAmount===0){
+            router.push("/admin")
+        }
+        addToken(token)
+    },[])
 
         return (
             <>
-            
-            {/* <div
-                style={{
-                    display:"flex",
-                    justifyContent:"center",
-                    alignItems:"center",
-
-                }}
-            >
-                <div
-                    style={{
-                        width:"500px"
-                    }}
-                >
-                    <Tooltip title="Go Back">
-                        <Button onClick={()=>handleStates()} > <ArrowBackIcon sx={{margin:"1rem"}}/> Order Again </Button>
-                    </Tooltip>
-                    <Typography variant="h5" sx={{textAlign:"center", margin:"1rem"}}>Payment Successfull</Typography>
-                    <Typography variant="h6" sx={{textAlign:"center"}}>Thankyou for your purchase</Typography>
-                    <TableContainer>
-                    <Table sx={{ minWidth:350 }} aria-label="simple table">
-                        <TableHead>
-                        <TableRow>
-                            <TableCell>Item</TableCell>
-                            <TableCell align="right">Quantity</TableCell>
-                        </TableRow>
-                        </TableHead>
-                        <TableBody>
-                        {
-                            items.map((item)=>{
-                                return (
-                                    <>
-                                        <TableRow>    
-                                            <TableCell component="th" scope="row">
-                                                {item.name}
-                                            </TableCell>
-                                            <TableCell align="right">{item.quantity}</TableCell>
-                                        </TableRow>
-                                    </>
-                                )
-                            })
-                        }    
-                        <TableRow>
-                            <TableCell component="th" scope="row" sx={{fontWeight:"bold"}}>
-                                Total Amount:
-                            </TableCell>
-                            <TableCell align="right" sx={{fontWeight:"bold"}}> ₹ {totalAmount}</TableCell>
-                        </TableRow>
-                        </TableBody>
-                    </Table>
-                    </TableContainer>
-                </div>
-            </div> */}
             <Navbar type={"customer"} />
             <div 
                 className='billShowDiv'
@@ -118,7 +79,7 @@ const CartPage = () => {
                                 </TableHead>
                                 <TableBody>
                                 {
-                                    items.map((item)=>{
+                                    billItems.map((item)=>{
                                         return (
                                             <>
                                                 <TableRow>    
@@ -135,7 +96,7 @@ const CartPage = () => {
                                     <TableCell component="th" scope="row" sx={{fontWeight:"bold"}}>
                                         Total Amount:
                                     </TableCell>
-                                    <TableCell align="right" sx={{fontWeight:"bold"}}> ₹ {totalAmount}</TableCell>
+                                    <TableCell align="right" sx={{fontWeight:"bold"}}> ₹ {billAmount}</TableCell>
                                 </TableRow>
                                 </TableBody>
                             </Table>

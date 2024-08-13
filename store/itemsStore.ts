@@ -10,13 +10,18 @@ export interface addedItem{
 
 interface State{
     totalAmount:number;
+    billAmount:number;
     items:addedItem[];
+    billItems:addedItem[];
     addItem:(item:Item)=>void;
     deleteItem:(id:string)=>void;
     addCost:(amount:number)=>void;
     subCost:(amount:number)=>void;
+    addBillAmount:(amount:number)=>void;
+    addBillItems:(item:addedItem[])=>void;
     clearItems:()=>void;
     clearAmount:()=>void;
+
 }
 
 const addItems = (items:addedItem[], item:Item):addedItem[]=>{
@@ -50,6 +55,8 @@ const deleteItem = (items:addedItem[], id:string):addedItem[]=>{
 
 const itemStore = create<State>((set)=>({
    totalAmount:0,
+   billAmount:0,
+   billItems:[] as addedItem[],
    items:[] as addedItem[],
    addItem:(item:Item)=>set((state)=>({
         items : addItems(state.items, item)
@@ -62,6 +69,12 @@ const itemStore = create<State>((set)=>({
    })),
    subCost:(cost:number)=>set((state)=>({
     totalAmount:state.totalAmount-cost
+   })),
+   addBillAmount:(cost:number)=>set((state)=>({
+    billAmount:cost
+   })),
+   addBillItems:(items:addedItem[])=>set((state)=>({
+    billItems:items
    })),
    clearAmount:()=>set((state)=>({
     totalAmount:0

@@ -93,7 +93,7 @@ const ItemCard = ({item, handleItemsUpdate}:CardProp) => {
             <div className='imageCardContainer'>
               {/* image */}
               <img 
-                  src="https://th.bing.com/th/id/OIP.eTT3w24Pb9S-JKIIw85AewHaKE?w=132&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7" 
+                  src={item.display_image_url} 
                   alt="Item Image"
                   style={{width:"100%", height:"100%", objectFit:"contain", boxShadow:"0 4px 2px -2px rgba(0, 0, 0, 0.2)"}}    
                   
