@@ -1,13 +1,17 @@
 
 import AllItems from "./components/allItems";
-import Navbar from "./components/navbar";
+import Navbar from "./components/navbars/navbar";
 import TotalCost from "./components/totalCost";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 export default function Home() {
   return (
     <div>
-        <Navbar />
+        <Navbar type={"customer"} />
           <AllItems />
         <TotalCost/>
+        <ToastContainer />
     </div>
   );
 }
