@@ -46,9 +46,13 @@ const CartModal = ({open, handleClickOpen, handleClose}:CartProps) => {
         const result = await axios.patch("http://localhost:8080/items/bulkUpdate",items)
         if(result.status === 200){
             handleSuccessToast()
-            router.push("/bill")
+            handleClose()
+            setTimeout(()=>{
+                router.push("/bill")
+            }, 1000)
         }else{
             handleErrorToast()
+            handleClose()
         }
         setLoading(false)
     }

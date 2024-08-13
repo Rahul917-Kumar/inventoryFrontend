@@ -56,3 +56,22 @@
     border-radius: 3px;
     box-shadow: 2px 2px 15px 5px #767474;
 }
+
+.finalPurchaseDiv{
+    width:40%;
+    /* background-color: ; */
+    border-radius: 3px;
+    box-shadow: 2px 2px 15px 5px #767474;
+}
+
+.itemListBill{
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+.billShowDiv{
+    display: flex;
+    justify-content: center;
+    align-items: center;  
+    flex-direction: column;
+}

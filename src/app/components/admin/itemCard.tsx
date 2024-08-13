@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import { Item } from '@/app/interface/interface'
-import { Box, Button, Card, CardActionArea, CardContent, CardMedia, Typography } from '@mui/material'
+import { Box, Button, Card, CardActionArea, CardContent, CardMedia, Tooltip, Typography } from '@mui/material'
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import { toast } from 'react-toastify';
@@ -29,6 +29,7 @@ const ItemCard = ({item, handleItemsUpdate}:CardProp) => {
     const router = useRouter()
     const [quantity, setQuantity] = useState(item.available_quantity)
     const [loading, setLoading] = useState(false)
+    const [message, setMessage] = useState("")
     
     const intialQuantity = item.available_quantity
 
@@ -47,6 +48,7 @@ const ItemCard = ({item, handleItemsUpdate}:CardProp) => {
 
     const updateItem = async(_id:string, quantity:number)=>{
         // api call to update item
+        setMessage("Updating the Quantity")
         setLoading(true)
         const result = await axios.patch("http://localhost:8080/items", {_id, available_quantity:quantity},{
             headers: {
@@ -69,7 +71,9 @@ const ItemCard = ({item, handleItemsUpdate}:CardProp) => {
           handleErrorToast("Something went wrong Please Retry")
           setQuantity(item.available_quantity)
         }
+        setMessage("")
         setLoading(false)
+
       }
 
   return (
@@ -77,7 +81,7 @@ const ItemCard = ({item, handleItemsUpdate}:CardProp) => {
     {
         loading?(
             <>
-                <Loader />
+                <Loader message={message} />
             </>
         ):(
             <></>
@@ -101,25 +105,19 @@ const ItemCard = ({item, handleItemsUpdate}:CardProp) => {
             <Typography sx={{fontWeight:"400", margin:"0.5rem 0 0.5rem 0", fontSize:"1.4rem"}}>₹ {item.price}</Typography>
           </div>
           
-                    <div 
-                        // className='addItemDiv flexElementsRow'
-                      >
+                    <div >
                       <IncrementDecrementCount intialQuantity={intialQuantity} quantity={quantity} maxQuantity={maxQuantity} handleQuantity={handleQuantity}  />
                     </div>
-                    <div className='addItemDiv' style={{padding:"1rem"}}>
-                            <Button 
-                                onClick={()=>updateItem(item._id, quantity)} 
-                                disabled={(intialQuantity===quantity || loading)?true:false}
-                                variant='contained'
-                                sx={{
-                                    "&.Mui-disabled": {
-                                        backgroundColor: "#b0c4de", 
-                                        color: "gray",              
-                                    },
-                                }}
-                            >
-                                Done 
-                            </Button>
+                    <div className='addItemDiv' style={{padding:"1rem", cursor:(intialQuantity===quantity || loading)?"not-allowed":"pointer",
+                        backgroundColor:(intialQuantity===quantity || loading)?"gray":"#1565c0"
+                     }}
+                     onClick={() => {
+                        if (intialQuantity !== quantity && !loading) {
+                          updateItem(item._id, quantity);
+                        }
+                      }}
+                    >
+                        Done 
                     </div>
         </div>
         </div>
@@ -132,19 +130,22 @@ export default ItemCard
 const IncrementDecrementCount = ({intialQuantity, quantity, maxQuantity, handleQuantity}:IncrementQuantityProps)=>{
     return (
       <Box sx={{marginLeft:"5px", display:"flex", justifyContent:"space-evenly", alignContent:"center", alignItems:"center"}}>
-        <Button onClick={()=>handleQuantity("decrease")}
-            disabled={quantity === intialQuantity ?true:false}
-            sx={{color: quantity === intialQuantity ? '#A9A9A9' : 'blue', fontSize:"2rem"}} > 
-            <RemoveIcon/> 
-        </Button>
+        <Tooltip title="Decrease Quantity">
+            <Button onClick={()=>handleQuantity("decrease")}
+                disabled={quantity === intialQuantity ?true:false}
+                sx={{color: quantity === intialQuantity ? '#A9A9A9' : 'blue', fontSize:"2rem"}} > 
+                <RemoveIcon/> 
+            </Button>
+        </Tooltip>
         <p style={{margin:"5px",fontSize:"1.3rem"}}>{quantity}/{maxQuantity}</p>
-        <Button 
-            onClick={()=>handleQuantity("increase")} 
-            disabled={quantity === maxQuantity ?true:false}
-            sx={{ backgroundColor: quantity === maxQuantity ? '' : ''}}
-        > 
-            <AddIcon sx={{color: quantity === maxQuantity ? '#A9A9A9' : 'blue', fontSize:"2rem"}}/> 
-        </Button>
+        <Tooltip title="Increase Quantity">
+            <Button 
+                onClick={()=>handleQuantity("increase")} 
+                disabled={quantity === maxQuantity ?true:false}
+            > 
+                <AddIcon sx={{color: quantity === maxQuantity ? '#A9A9A9' : 'blue', fontSize:"2rem"}}/> 
+            </Button>
+        </Tooltip>
       </Box>
     )
   }
