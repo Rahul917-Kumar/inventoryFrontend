@@ -10,7 +10,7 @@ import { Box, Button, CardActionArea, CardActions } from '@mui/material';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import itemStore from '../../../store/itemsStore';
-
+import Image from './image';
 interface ItemCardProps {
   item: Item;
 }
@@ -48,37 +48,31 @@ const ItemCard = ({item}:ItemCardProps) => {
   
   return (
     <div>
-        <div className='card flexElements' style={{height: "22rem"}}>
-          <div className='flexElementsRow'>
-            <div className='imageCardContainer'>
-              {/* image */}
-              <img 
-                  src={item.display_image_url} 
-                  alt="Item Image"
-                  style={{width:"100%", height:"100%", objectFit:"contain", boxShadow:"0 4px 2px -2px rgba(0, 0, 0, 0.2)"}}    
-                  
-              />
-            </div>
-          </div>
-          <div style={{backgroundColor:"", padding:"0.5rem", textAlign:"center"}}>
-            <Typography variant='h5' sx={{fontWeight:"bold"}}> {item.name} </Typography>
-            <Typography sx={{fontWeight:"400", margin:"0.5rem 0 0.5rem 0", fontSize:"1.4rem"}}>₹ {item.price}</Typography>
-          </div>
+        <div className='card' style={{height: "22rem"}}>
+          <Image image_url={item.display_image_url} />
           
+          <div style={{ display:"flex", margin:"0.6rem 0 0.6rem 0 ",alignItems:"flex-end", height:"4.5rem"}}>
+            <Typography variant='h5' sx={{fontWeight:"400", letterSpacing:"1px", margin:"0.4rem"}}> {item.name} </Typography>
+          </div>
+            <div className='quantityAndItemLeft' style={{margin:"0.4rem"}}>
+              <Typography sx={{fontWeight:"450", fontSize:"1.4rem"}}>₹ {item.price}</Typography>
+              <Typography sx={{fontSize:"0.8rem", color:"blue"}}>only <span style={{fontWeight:"bold"}}>{item.available_quantity}</span> left</Typography>
+            </div>
+
             {
               itemCount===0?(
                 <>
                     <div 
                         className='addItemDiv'
                         onClick={()=>handleAddItems()}
-                        style={{padding:"1.5rem"}}
+                        style={{padding:"0.9rem"}}
                       >
                       ADD
                     </div>
                 </>
               ):(
                 <>
-                  <div className='addItemDiv' style={{padding:"1.5rem"}}>
+                  <div className='addItemDiv' style={{padding:"0.9rem"}}>
                     <IncrementDecrementCount 
                                 itemCount={itemCount} 
                                 available_quantity={item.available_quantity} 
@@ -100,15 +94,14 @@ export default ItemCard
 const IncrementDecrementCount = ({itemCount, available_quantity, handleAddItems, handleRemoveItems}:AddItem)=>{
   return (
     <Box sx={{   display:"flex", justifyContent:"space-evenly", alignContent:"center", alignItems:"center",}}>
-      <Button onClick={handleRemoveItems} sx={{color:"white", padding:"0", margin:"0"}}> <RemoveIcon/> </Button>
-      <p style={{fontWeight:"bold", padding:"0", margin:"0", fontSize:"1.4rem"}}>{itemCount}</p>
-      <Button 
-          onClick={handleAddItems} 
-          disabled={itemCount===available_quantity?true:false}
-          sx={{color:"white", padding:"0", margin:"0"}}
-      > 
-          <AddIcon/> 
-      </Button>
+      <RemoveIcon onClick={handleRemoveItems} sx={{color:"white", padding:"0", margin:"0"}}/> 
+      <p style={{fontWeight:"bold", padding:"0", margin:"0", fontSize:"1rem"}}>{itemCount}</p>
+          <AddIcon 
+              onClick={()=>{
+                if(itemCount!==available_quantity)
+                  handleAddItems()
+              }} 
+              sx={{color: itemCount===available_quantity?"gray":"white", padding:"0", margin:"0"}}/> 
     </Box>
   )
 }

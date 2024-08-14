@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation';
 import { handleErrorToast } from '../../../../lib/handleToast';
 import { handleSuccessToast } from '../../../../lib/handleToast';
 import Loader from '../loading';
+import Image from '../image';
 
 interface CardProp{
     item:Item,
@@ -88,28 +89,20 @@ const ItemCard = ({item, handleItemsUpdate}:CardProp) => {
         )
     }
         <div>
-            <div className='card flexElements' style={{height: "23rem"}}>
-          <div className='flexElementsRow'>
-            <div className='imageCardContainer'>
-              {/* image */}
-              <img 
-                  src={item.display_image_url} 
-                  alt="Item Image"
-                  style={{width:"100%", height:"100%", objectFit:"contain", boxShadow:"0 4px 2px -2px rgba(0, 0, 0, 0.2)"}}    
-                  
-              />
+            <div className='card' style={{height: "25rem"}}>
+          <Image image_url={item.display_image_url} />
+            <div style={{ display:"flex", margin:"0.6rem 0 0.6rem 0 ",alignItems:"flex-end", height:"4.5rem"}}>
+            <Typography variant='h5' sx={{fontWeight:"400", letterSpacing:"1px", margin:"0.4rem"}}> {item.name} </Typography>
             </div>
-          </div>
-          <div style={{backgroundColor:"", padding:"0.5rem", textAlign:"center"}}>
-            <Typography variant='h5' sx={{fontWeight:"bold"}}> {item.name} </Typography>
-            <Typography sx={{fontWeight:"400", margin:"0.5rem 0 0.5rem 0", fontSize:"1.4rem"}}>₹ {item.price}</Typography>
-          </div>
-          
+                <div className='quantityAndItemLeft' style={{margin:"0.4rem"}}>
+                <Typography sx={{fontWeight:"450", fontSize:"1.4rem"}}>₹ {item.price}</Typography>
+                <Typography sx={{fontSize:"0.8rem", color:"blue"}}>current quant: <span style={{fontWeight:"bold"}}>{item.available_quantity}</span> </Typography>
+            </div>
                     <div >
                       <IncrementDecrementCount intialQuantity={intialQuantity} quantity={quantity} maxQuantity={maxQuantity} handleQuantity={handleQuantity}  />
                     </div>
                     <div className='addItemDiv' style={{padding:"1rem", cursor:(intialQuantity===quantity || loading)?"not-allowed":"pointer",
-                        backgroundColor:(intialQuantity===quantity || loading)?"gray":"#1565c0"
+                        backgroundColor:(intialQuantity===quantity || loading)?"#c0c0c0 ":"#041690"
                      }}
                      onClick={() => {
                         if (intialQuantity !== quantity && !loading) {
