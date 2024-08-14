@@ -45,7 +45,7 @@ const CartModal = ({open, handleClickOpen, handleClose}:CartProps) => {
     const handlePayment = async()=>{
         console.log("items from total cost", items)
         setLoading(true)
-        const result = await axios.patch("http://localhost:8080/items/bulkUpdate",items)
+        const result = await axios.patch("https://inventorybackend-ytw9.onrender.com/items/bulkUpdate",items)
         if(result.status === 200){
             handleSuccessToast()
             handleClose()

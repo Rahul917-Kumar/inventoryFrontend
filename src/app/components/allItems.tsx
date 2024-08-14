@@ -14,7 +14,7 @@ const AllItems = () => {
     const [loading, setLoading] = useState(false)
     const getAllItems = async()=>{
         setLoading(true)
-        const result = await axios.get("http://localhost:8080/items")
+        const result = await axios.get("https://inventorybackend-ytw9.onrender.com/items")
         if(result.status === 200){
             setItems([...result.data])
         }else{

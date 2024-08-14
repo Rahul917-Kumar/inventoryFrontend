@@ -77,7 +77,7 @@ const AddItem = () => {
 
         console.log("items to be uploaded", tempItems)
 
-        const result = await axios.post("http://localhost:8080/items", tempItems,{
+        const result = await axios.post("https://inventorybackend-ytw9.onrender.com/items", tempItems,{
             headers: {
                 'Authorization': `Bearer ${token}`
             }

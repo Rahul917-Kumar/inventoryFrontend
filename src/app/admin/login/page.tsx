@@ -34,7 +34,7 @@ const LoginPage = () => {
       return 
     }
     setLoading(true)
-    const result = await axios.post("http://localhost:8080/user/login", {email, password})
+    const result = await axios.post("https://inventorybackend-ytw9.onrender.com/user/login", {email, password})
     console.log(result)
     if(result.status===200){
       localStorage.setItem("token", result.data.token)

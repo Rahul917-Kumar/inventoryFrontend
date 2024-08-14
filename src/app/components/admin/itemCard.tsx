@@ -51,7 +51,7 @@ const ItemCard = ({item, handleItemsUpdate}:CardProp) => {
         // api call to update item
         setMessage("Updating the Quantity")
         setLoading(true)
-        const result = await axios.patch("http://localhost:8080/items", {_id, available_quantity:quantity},{
+        const result = await axios.patch("https://inventorybackend-ytw9.onrender.com/items", {_id, available_quantity:quantity},{
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'  // Content type if sending JSON
