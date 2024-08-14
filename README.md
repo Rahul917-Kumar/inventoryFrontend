@@ -34,6 +34,7 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 - Admin can visit the ADD New Item page by clicking ```AddItems``` button on the navbar
 - Admin can add multiple list of items and can also upload image for a item otherwise the item will have a default image
+- clicking on ```Update Inventory``` button will push the list to DB 
 ![uploadImageprocess](https://github.com/user-attachments/assets/ece07acf-bf1a-4979-bc44-bbd981e86b0f)
 ![addItemList](https://github.com/user-attachments/assets/f06b730c-7fc5-4ffd-b403-ff150efe0558)
 
