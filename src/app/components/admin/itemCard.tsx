@@ -89,7 +89,7 @@ const ItemCard = ({item, handleItemsUpdate}:CardProp) => {
         )
     }
         <div>
-            <div className='card' style={{height: "25rem"}}>
+            <div className='card' style={{height: "25.5rem"}}>
           <Image image_url={item.display_image_url} />
             <div style={{ display:"flex", margin:"0.6rem 0 0.6rem 0 ",alignItems:"flex-end", height:"4.5rem"}}>
             <Typography variant='h5' sx={{fontWeight:"400", letterSpacing:"1px", margin:"0.4rem"}}> {item.name} </Typography>
@@ -102,7 +102,7 @@ const ItemCard = ({item, handleItemsUpdate}:CardProp) => {
                       <IncrementDecrementCount intialQuantity={intialQuantity} quantity={quantity} maxQuantity={maxQuantity} handleQuantity={handleQuantity}  />
                     </div>
                     <div className='addItemDiv' style={{padding:"1rem", cursor:(intialQuantity===quantity || loading)?"not-allowed":"pointer",
-                        backgroundColor:(intialQuantity===quantity || loading)?"#c0c0c0 ":"#041690"
+                        backgroundColor:(intialQuantity===quantity || loading)?"#c0c0c0 ":"#041690",
                      }}
                      onClick={() => {
                         if (intialQuantity !== quantity && !loading) {

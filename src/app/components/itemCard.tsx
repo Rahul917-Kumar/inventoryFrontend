@@ -52,7 +52,7 @@ const ItemCard = ({item}:ItemCardProps) => {
           <Image image_url={item.display_image_url} />
           
           <div style={{ display:"flex", margin:"0.6rem 0 0.6rem 0 ",alignItems:"flex-end", height:"4.5rem"}}>
-            <Typography variant='h5' sx={{fontWeight:"400", letterSpacing:"1px", margin:"0.4rem"}}> {item.name} </Typography>
+            <Typography sx={{fontWeight:"500",  margin:"0.4rem", fontSize:"1.4rem"}}> {item.name} </Typography>
           </div>
             <div className='quantityAndItemLeft' style={{margin:"0.4rem"}}>
               <Typography sx={{fontWeight:"450", fontSize:"1.4rem"}}>₹ {item.price}</Typography>
