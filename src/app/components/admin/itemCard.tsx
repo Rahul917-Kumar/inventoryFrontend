@@ -13,6 +13,7 @@ import { handleErrorToast } from '../../../../lib/handleToast';
 import { handleSuccessToast } from '../../../../lib/handleToast';
 import Loader from '../loading';
 import Image from '../image';
+import ItemDetail from '../itemDetail';
 
 interface CardProp{
     item:Item,
@@ -54,7 +55,7 @@ const ItemCard = ({item, handleItemsUpdate}:CardProp) => {
         const result = await axios.patch("https://inventorybackend-ytw9.onrender.com/items", {_id, available_quantity:quantity},{
             headers: {
                 'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'  // Content type if sending JSON
+                'Content-Type': 'application/json'  
             }
         })
         if(result.status===200){
@@ -79,39 +80,25 @@ const ItemCard = ({item, handleItemsUpdate}:CardProp) => {
 
   return (
     <>
-    {
-        loading?(
-            <>
-                <Loader message={message} />
-            </>
-        ):(
-            <></>
-        )
-    }
+        <Loader message={message} open={loading} />
         <div>
-            <div className='card' style={{height: "25.5rem"}}>
-          <Image image_url={item.display_image_url} />
-            <div style={{ display:"flex", margin:"0.6rem 0 0.6rem 0 ",alignItems:"flex-end", height:"4.5rem"}}>
-            <Typography variant='h5' sx={{fontWeight:"400", letterSpacing:"1px", margin:"0.4rem"}}> {item.name} </Typography>
+            <div className='card' style={{height: "25.5rem", maxHeight:"26rem"}}>
+            <Image image_url={item.display_image_url} />
+            <ItemDetail name={item.name} price={item.price} available_quantity={item.available_quantity} />
+            <div >
+                <IncrementDecrementCount intialQuantity={intialQuantity} quantity={quantity} maxQuantity={maxQuantity} handleQuantity={handleQuantity}  />
             </div>
-                <div className='quantityAndItemLeft' style={{margin:"0.4rem"}}>
-                <Typography sx={{fontWeight:"450", fontSize:"1.4rem"}}>₹ {item.price}</Typography>
-                <Typography sx={{fontSize:"0.8rem", color:"blue"}}>current quant: <span style={{fontWeight:"bold"}}>{item.available_quantity}</span> </Typography>
+            <div className='addItemDiv' style={{padding:"1rem", cursor:(intialQuantity===quantity || loading)?"not-allowed":"pointer",
+                backgroundColor:(intialQuantity===quantity || loading)?"#c0c0c0 ":"#041690",
+                }}
+                onClick={() => {
+                if (intialQuantity !== quantity && !loading) {
+                    updateItem(item._id, quantity);
+                }
+                }}
+            >
+                Done 
             </div>
-                    <div >
-                      <IncrementDecrementCount intialQuantity={intialQuantity} quantity={quantity} maxQuantity={maxQuantity} handleQuantity={handleQuantity}  />
-                    </div>
-                    <div className='addItemDiv' style={{padding:"1rem", cursor:(intialQuantity===quantity || loading)?"not-allowed":"pointer",
-                        backgroundColor:(intialQuantity===quantity || loading)?"#c0c0c0 ":"#041690",
-                     }}
-                     onClick={() => {
-                        if (intialQuantity !== quantity && !loading) {
-                          updateItem(item._id, quantity);
-                        }
-                      }}
-                    >
-                        Done 
-                    </div>
         </div>
         </div>
     </>

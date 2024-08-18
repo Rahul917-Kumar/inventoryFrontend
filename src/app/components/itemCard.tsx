@@ -11,6 +11,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import itemStore from '../../../store/itemsStore';
 import Image from './image';
+import ItemDetail from './itemDetail';
 interface ItemCardProps {
   item: Item;
 }
@@ -50,15 +51,7 @@ const ItemCard = ({item}:ItemCardProps) => {
     <div>
         <div className='card' style={{height: "22rem"}}>
           <Image image_url={item.display_image_url} />
-          
-          <div style={{ display:"flex", margin:"0.6rem 0 0.6rem 0 ",alignItems:"flex-end", height:"4.5rem"}}>
-            <Typography sx={{fontWeight:"500",  margin:"0.4rem", fontSize:"1.4rem"}}> {item.name} </Typography>
-          </div>
-            <div className='quantityAndItemLeft' style={{margin:"0.4rem"}}>
-              <Typography sx={{fontWeight:"450", fontSize:"1.4rem"}}>₹ {item.price}</Typography>
-              <Typography sx={{fontSize:"0.8rem", color:"blue"}}>only <span style={{fontWeight:"bold"}}>{item.available_quantity}</span> left</Typography>
-            </div>
-
+          <ItemDetail name={item.name} price={item.price} available_quantity={item.available_quantity} />
             {
               itemCount===0?(
                 <>

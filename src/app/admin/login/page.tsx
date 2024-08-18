@@ -51,15 +51,7 @@ const LoginPage = () => {
 
   return (
     <>
-    {
-      loading?(
-        <>
-          <Loader />
-        </>
-      ):(
-        <></>
-      )
-    }
+    <Loader open={loading}/>
     <ToastContainer />
     <Navbar type={"admin"}/>
       <Box

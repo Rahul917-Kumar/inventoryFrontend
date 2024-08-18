@@ -23,6 +23,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Navbar from '@/app/components/navbars/navbar';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
+import { handleWarningToast } from '../../../../lib/handleToast';
 
 interface NewItem{
     name:string;
@@ -48,6 +49,7 @@ const AddItem = () => {
   const [item, setItem] = useState<NewItem>({} as NewItem)
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState("")
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
   const {token, addToken} = tokenStore((state)=>({
     token:state.token,
     addToken:state.addToken
@@ -102,17 +104,20 @@ const AddItem = () => {
 
   },[])
 
+  useEffect(() => {
+        const handleResize = () => {
+            setIsSmallScreen(window.innerWidth < 500);
+        };
+
+        window.addEventListener('resize', handleResize);
+        handleResize();
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
   return (
     <>
-         {
-            loading?(
-                <>
-                    <Loader message={message}/>
-                </>
-            ):( 
-                <></>
-            )
-         }
+        <Loader message={message} open={loading}/>
          <ToastContainer />
          <Navbar type={"admin"} />
 
@@ -122,21 +127,27 @@ const AddItem = () => {
         >
 
             <div className='adminAddItemInnerDiv' style={{margin:"1rem"}}>
-                <div style={{display:"flex", justifyContent:"space-between", margin:"1rem"}}>
-                <Tooltip title="New Item">
-                    <Button sx={{}} onClick={handleOpenModal} variant='contained' startIcon={<AddCircleIcon/>}>
-                            New Item
-                    </Button>  
-                </Tooltip>
+                <div style={{ display: "flex", justifyContent: "space-between", margin: "1rem" }}>
+                    <Tooltip title="New Item">
+                        <Button 
+                            onClick={handleOpenModal} 
+                            variant='contained' 
+                            startIcon={<AddCircleIcon />}
+                            
+                        >
+                            {!isSmallScreen && 'New Item'}
+                        </Button>
+                    </Tooltip>
                     <Tooltip title="Update Inventory">
-                        <Button sx={{}} 
+                        <Button 
+                            sx={{}} 
                             onClick={handleAddItemToInventory} 
                             variant='contained' 
-                            startIcon={<FileUploadIcon/>}
-                            disabled={newItems.length===0?true:false}
+                            startIcon={<FileUploadIcon />}
+                            disabled={newItems.length === 0}
                         >
-                                Update Inventory
-                        </Button>  
+                            {!isSmallScreen && 'Update Inventory'}
+                        </Button>
                     </Tooltip>
                 </div>
                 <DisplayAddedItem  items={newItems} />
@@ -215,7 +226,7 @@ const  AddNewItemModal = ({open, addItem, handleCloseModal }:ModalProps)=> {
 
     const handleAddItem = ()=>{
         if(!name || !quantity || !price){
-            handleErrorToast("Please Fill all the details ")
+            handleWarningToast("Please Fill all the details ")
             return 
         }
         // console.log(image_url)
@@ -273,22 +284,14 @@ const  AddNewItemModal = ({open, addItem, handleCloseModal }:ModalProps)=> {
 
     return (
       <>
-      {
-        loading?(
-            <>
-                <Loader message={message} />
-            </>
-        ):(
-            <></>
-        )
-      }
+        <Loader message={message} open={loading}/>
         <Dialog
           open={open}
           onClose={handleCloseModal}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <Box sx={{textAlign:"center", width:"400px", padding:"1rem"}}>
+          <Box sx={{textAlign:"center", padding:"1rem"}}>
             <DialogTitle id="alert-dialog-title">
                 Provide Details of Item
             </DialogTitle>

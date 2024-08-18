@@ -29,17 +29,7 @@ const AllItems = () => {
 
     return (
         <>
-        {
-            loading?(
-                <>
-                    <Loader message={""} />
-                </>
-            ):(
-                <>
-
-                </>
-            )
-        }
+        <Loader message={""} open={loading} />
             <Box sx={{  marginBottom:"100px"}}>
                 <Box
                     sx={{

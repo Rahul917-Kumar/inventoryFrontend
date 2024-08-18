@@ -55,17 +55,7 @@ const Page = () => {
   return (
     <>
     <Navbar type={"admin"}/>
-    {
-            loading?(
-                <>
-                    <Loader message={""} />
-                </>
-            ):(
-                <>
-
-                </>
-            )
-        }
+    <Loader message={""} open={loading} />
       <ToastContainer />
       {
         items.length ===0?(
