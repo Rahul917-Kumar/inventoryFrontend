@@ -28,7 +28,7 @@ interface NewItem{
     name:string;
     quantity:string;
     price:string;
-    image_url?:string;
+    image_url:string;
 }
 
 interface ModalProps{
@@ -54,30 +54,15 @@ const AddItem = () => {
   }))
   const addItem = (name:string, quantity:string, price:string, image_url:string)=>{
     // after adding item close modal
-    console.log(name, quantity, price, image_url)
-    if(image_url.length===0){
-        setNewItems([{name, quantity, price}, ...newItems])
-    }else{
-        setNewItems([{name, quantity, price, image_url}, ...newItems])
-    }
+    setNewItems([{name, quantity, price, image_url}, ...newItems])
     handleCloseModal()
   }
 
   const handleAddItemToInventory = async()=>{
         setMessage("Please Wait Adding Items to Inventory")
         setLoading(true)
-        // console.log("updating item")
-        const tempItems = newItems.map((item)=>{
-            if(item.image_url){
-                return {name:item.name, price:Number(item.price), available_quantity:Number(item.quantity), display_image_url:item.image_url}
-            }else{
-                return {name:item.name, price:Number(item.price), available_quantity:Number(item.quantity)}
-            }
-        }) 
-
-        console.log("items to be uploaded", tempItems)
-
-        const result = await axios.post("https://inventorybackend-ytw9.onrender.com/items", tempItems,{
+        
+        const result = await axios.post("https://inventorybackend-ytw9.onrender.com/items", newItems,{
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -87,9 +72,6 @@ const AddItem = () => {
         if(result.status===200){
             setNewItems([])
             handleSuccessToast("Successfully added Items to Inventory")
-            // setTimeout(()=>{
-            //     router.push("/admin")
-            // }, 1000)
         }
         else if(result.status===403){
             handleErrorToast("Session Expired Redirecting to Login page")
